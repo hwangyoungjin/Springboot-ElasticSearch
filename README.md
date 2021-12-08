@@ -116,15 +116,24 @@ public class ElasticsearchApplication {
 ```
 
 ## Test
+
 #### 1. ES index 확인
 ```shell
 # 192.168.64.4 = minikube Ip
 $ curl -XGET '192.168.64.4:9200/_cat/indices?v'
 ```
+
 #### 2. Create User Using Postman
 ```api
-
+ GET http://localhost:8080/api/users/hi
 ```
+
+#### 3. Fetch all document using json Query DSL(Domain Specific Language) from kibana
+- <img src="https://user-images.githubusercontent.com/60174144/145187371-18786d67-4416-48f7-a7f9-b4d7ae044ac9.png" width="50%" height="50%">
+
+
+
+
 
 
 
