@@ -8,7 +8,50 @@
 - kotlin
 - jdk11
 - springboot
+- h2 DataBase
 ```
+### Install Minikube cluster with docker container engine [생략]
+ - [Link](https://itnext.io/goodbye-docker-desktop-hello-minikube-3649f2a1c469)
+
+### [Execute elasticsearch with docker](https://www.elastic.co/guide/en/kibana/current/docker.html)
+```shell
+$ docker network create elastic
+$ docker pull docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+$ docker run --name es01-test --net elastic -d -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+```
+
+### Execute Kibana with docker
+```shell
+$ docker pull docker.elastic.co/kibana/kibana:7.10.0
+$ docker run --name kib01-test --net elastic -p 5601:5601 -e "ELASTICSEARCH_HOSTS=http://es01-test:9200" docker.elastic.co/kibana/kibana:7.10.0
+```
+
+### H2 DataBase 실행
+```shell
+# install h2 using homebrew
+$ brew install h2
+# start h2 db
+$ h2
+# DB 파일 생성
+1. http://localhost:8082 접속
+ - H2(Embedded)
+ - JDBC URL : jdbc:h2:~/testdb
+ - 사용자명 : sa
+# mv.db 확인
+$ cd ~
+$ ls
+> testdb.mv.db ...
+```
+### application.properties의 h2 DB 설정
+```properties
+spring.datasource.url=jdbc:h2:tcp://localhost/~/testdb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.h2.console.enabled=true
+```
+
 ## 1. Add dependency ES in gradle
 ```gradle
 //elasticSearch
@@ -30,11 +73,7 @@ implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch"
 
 ## 5. Service 생성
 
-## 6. Execute elasticsearch in docker
-```shell
-$ docker pull docker.elastic.co/elasticsearch/elasticsearch:7.10.0
-$ docker run -d -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.10.0
-```
+## 6. Controller 생성
 
 ## 7. logger 설정 to application.properties
 ```properties
@@ -69,5 +108,12 @@ class ElasticConfig : AbstractElasticsearchConfiguration() {
 @SpringBootApplication
 public class ElasticsearchApplication {
 ```
+
+## 9. ES index 확인
+```shell
+$ curl -XGET '192.168.64.4:9200/_cat/indices?v'
+```
+## 10. Test
+
 
 
