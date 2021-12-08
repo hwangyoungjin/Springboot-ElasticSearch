@@ -14,6 +14,7 @@ import java.net.URI
 class UserController(
     private val userService: UserService
 ){
+
     @PostMapping("/users")
     fun save(@RequestBody userRequest: UserRequestDto): ResponseEntity<Void> {
         val id: Long = userService.save(userRequest)
