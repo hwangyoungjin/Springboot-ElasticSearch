@@ -93,7 +93,7 @@ PagingAndSortingRepository<T, ID>를 확장
 spring.main.allow-bean-definition-overriding=true
 ```
 ### 2. No property searchSimilar found for type User
-```
+```kotlin
 @EnableJpaRepositories 애너테이션이 ElasticsearchRepository 인터페이스를 확장한
 Elasticsearch 관련 클래스를 스캐닝하면 위와 같은 에러가 발생
 
