@@ -2,13 +2,14 @@
 ### Ref.
  - [baeldung](https://www.baeldung.com/spring-data-elasticsearch-tutorial)
  - [springDataElasticSearch](https://tecoble.techcourse.co.kr/post/2021-10-19-elasticsearch/)
+
 ## envirionment
 ```gradle
 - kotlin
 - jdk11
 - springboot
 ```
-## 1. Add dependency in gradle
+## 1. Add dependency ES in gradle
 ```gradle
 //elasticSearch
 implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
