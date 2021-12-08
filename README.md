@@ -3,30 +3,29 @@
  - [baeldung](https://www.baeldung.com/spring-data-elasticsearch-tutorial)
  - [springDataElasticSearch](https://tecoble.techcourse.co.kr/post/2021-10-19-elasticsearch/)
 
-## envirionment
+## Envirionment
+### 1. Env
 ```gradle
 - kotlin
 - jdk11
 - springboot
 - h2 DataBase
 ```
-### Install Minikube cluster with docker container engine [생략]
+## How To Start
+### 1. Install Minikube cluster with docker container engine [생략]
  - [Link](https://itnext.io/goodbye-docker-desktop-hello-minikube-3649f2a1c469)
 
-### [Execute elasticsearch with docker](https://www.elastic.co/guide/en/kibana/current/docker.html)
+### 2. [Execute elasticsearch and kibana with docker](https://www.elastic.co/guide/en/kibana/current/docker.html)
 ```shell
 $ docker network create elastic
+# elasticsearch
 $ docker pull docker.elastic.co/elasticsearch/elasticsearch:7.10.0
 $ docker run --name es01-test --net elastic -d -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.10.0
-```
-
-### Execute Kibana with docker
-```shell
+# kibana
 $ docker pull docker.elastic.co/kibana/kibana:7.10.0
 $ docker run --name kib01-test --net elastic -p 5601:5601 -e "ELASTICSEARCH_HOSTS=http://es01-test:9200" docker.elastic.co/kibana/kibana:7.10.0
 ```
-
-### H2 DataBase 실행
+### 3. H2 DataBase 실행
 ```shell
 # install h2 using homebrew
 $ brew install h2
@@ -42,7 +41,9 @@ $ cd ~
 $ ls
 > testdb.mv.db ...
 ```
-### application.properties의 h2 DB 설정
+
+## Spring Boot Dev
+### 1. application.properties의 h2 DB 설정
 ```properties
 spring.datasource.url=jdbc:h2:tcp://localhost/~/testdb
 spring.datasource.driverClassName=org.h2.Driver
@@ -52,35 +53,35 @@ spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
 spring.h2.console.enabled=true
 ```
 
-## 1. Add dependency ES in gradle
+### 2. Add dependency ES in gradle
 ```gradle
 //elasticSearch
 implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
 ```
-## 2. entity 추가
+### 3. entity 추가
 ```kotlin
 - User
 - BasicProfile (Embedded)
 ```
 
-## 3. Reposirory 추가
+### 4. Reposirory 추가
  - @Query는 org.springframework.data.elasticsearch.annotations의 @Query를 사용
 
-## 4. ElasticSearch Config 설정
+### 5. ElasticSearch Config 설정
  - 이때 minikube 안에서 elasticsearch를 띄우고 있으므로
  - localhost:9200이 아닌 minikubeIP:9200으로 설정
  - localhost:9200으로 실행 시 => 'connection refused'
 
-## 5. Service 생성
+### 6. Service 생성
 
-## 6. Controller 생성
+### 7. Controller 생성
 
-## 7. logger 설정 to application.properties
+### 8. elasticsearch logger 설정 to application.properties
 ```properties
 logging.level.org.springframework.data.elasticsearch.client.WIRE=TRACE
 ```
 
-## 8. Issue
+## Issue
 ### 1.Spring Data JPA와 함께 사용하는 경우 ApplicationContext 로드에 실패
 ```
 User 클래스를 위해 생성한 JPA용 Repository와 Elasticsearch용 Repository 인터페이스 모두
@@ -108,12 +109,15 @@ class ElasticConfig : AbstractElasticsearchConfiguration() {
 @SpringBootApplication
 public class ElasticsearchApplication {
 ```
-
-## 9. ES index 확인
+## Test
+### 1. ES index 확인
 ```shell
 $ curl -XGET '192.168.64.4:9200/_cat/indices?v'
 ```
-## 10. Test
+### 2. Create User Using Postman
+```api
+
+```
 
 
 
