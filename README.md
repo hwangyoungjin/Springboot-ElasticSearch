@@ -26,7 +26,7 @@ $ docker run --name es01-test --net elastic -d -p 9200:9200 -p 9300:9300 -e "dis
 $ docker pull docker.elastic.co/kibana/kibana:7.10.0
 $ docker run --name kib01-test --net elastic -p 5601:5601 -e "ELASTICSEARCH_HOSTS=http://es01-test:9200" docker.elastic.co/kibana/kibana:7.10.0
 ```
-#### 3. H2 DataBase 실행
+#### 3. H2 DataBase 실행 [Server Mode](http://www.h2database.com/html/features.html)
 ```shell
 # install h2 using homebrew
 $ brew install h2
@@ -34,7 +34,7 @@ $ brew install h2
 $ h2
 # DB 파일 생성
 1. http://localhost:8082 접속
- - H2(Embedded)
+ - H2
  - JDBC URL : jdbc:h2:~/testdb
  - 사용자명 : sa
 # mv.db 확인
