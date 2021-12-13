@@ -21,7 +21,7 @@ class ElasticSynchronizer(
     private val userRepository: UserRepository,
 ) {
 
-    @Scheduled(cron = "*/10 * * * * *") //10초 마다 실행
+    @Scheduled(cron = "*/60 * * * * *") //60초 마다 실행
     @Transactional
     fun sync(){
         logger.info("Start Syncing - {}", LocalDateTime.now())
@@ -30,6 +30,7 @@ class ElasticSynchronizer(
     }
 
     private fun syncUsers(){
+        //최근 2시간 동안 갱신된 Post 찾아서 ElasticSearch 갱신
         val startDate = LocalDateTime.now().minusHours(2)
         val endDate = LocalDateTime.now()
 

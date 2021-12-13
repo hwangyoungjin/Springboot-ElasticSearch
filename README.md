@@ -61,13 +61,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
 }
 ```
-#### 3. entity 추가
+#### 3. entity 추가 [코드 생략]
 ```kotlin
 - User
 - BasicProfile (Embedded)
 ```
 
-#### 4. Reposirory 추가
+#### 4. Reposirory 추가 [코드 생략]
+ - <img src="https://user-images.githubusercontent.com/60174144/145787471-16ddf4f6-3047-4ba3-b3bb-9c61d2941ba7.png" width="50%" height="50%">
  - @Query는 org.springframework.data.elasticsearch.annotations의 @Query를 사용
 
 #### 5. ElasticSearch Config 설정
@@ -75,9 +76,15 @@ dependencies {
  - localhost:9200이 아닌 192.168.64.4(=minikube IP):9200으로 설정
  - localhost:9200으로 실행 시 => 'connection refused'
 
-#### 6. Service 생성
+#### 6. Service 생성 [코드 생략]
+```kotlin
+- UserSearvice
+```
 
-#### 7. Controller 생성
+#### 7. Controller 생성 [코드 생략]
+```kotlin
+- UserController
+```
 
 #### 8. elasticsearch logger 설정 to application.properties
 ```properties
@@ -85,7 +92,7 @@ logging.level.org.springframework.data.elasticsearch.client.WIRE=TRACE
 ```
 
 #### 9. [Database와 elasticsearch Sync 맞추기](https://medium.com/@yassine.s.sabri/how-to-synchronize-mysql-database-with-elasticsearch-and-perform-data-querying-in-a-spring-boot-829ff7717380)
-##### 1. 스프링 스케쥴러 실행
+##### 1. 스프링 스케쥴러 설정
 ```kotlin
 @EnableScheduling
 class SpringElasticSearchApplication
@@ -103,16 +110,44 @@ class User (
 
     ...
 
-    @UpdateTimestamp
-    val modifiedAt : Timestamp
+    @Field(type = FieldType.Date, format = [], pattern = ["uuuu-MM-dd HH:mm:ss"])
+    var modificationDate : LocalDateTime? = null
 
 )
 ```
 ##### 3. scheduler service 생성
 ```kotlin
+@Service
+class ElasticSynchronizer(
+    private val userSearchRepository: UserSearchRepository,
+    private val userRepository: UserRepository,
+) {
 
+    @Scheduled(cron = "*/60 * * * * *") //60초 마다 실행
+    @Transactional
+    fun sync(){
+        logger.info("Start Syncing - {}", LocalDateTime.now())
+        syncUsers()
+        logger.info("end Syncing - {}", LocalDateTime.now())
+    }
+
+    private fun syncUsers(){
+        //최근 2시간 동안 갱신된 Post 찾아서 ElasticSearch 갱신
+        val startDate = LocalDateTime.now().minusHours(2)
+        val endDate = LocalDateTime.now()
+
+        val userList: List<User> = if (userSearchRepository.count() == 0L) {
+            userRepository.findAll()
+        } else {
+            userRepository.findAllByModificationDate(startDate,endDate)
+        }
+        for (user in userList) {
+            logger.info("Syncing User - {}", user.id)
+            userSearchRepository.save(user)
+        }
+    }
+}
 ```
-- [localdata 참조](https://stackoverflow.com/questions/47928424/localdate-between-using-jpa-2-1-criteria-api)
 
 
 ## Issue
