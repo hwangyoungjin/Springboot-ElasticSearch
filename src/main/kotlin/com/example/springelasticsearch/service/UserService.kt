@@ -35,7 +35,8 @@ class UserService(
     private fun of(user: User):UserResponseDto{
         return UserResponseDto(
             name = user.basicProfile!!.name,
-            description = user.basicProfile!!.description
+            description = user.basicProfile!!.description,
+            modificationDate = user.modificationDate
         )
     }
 }

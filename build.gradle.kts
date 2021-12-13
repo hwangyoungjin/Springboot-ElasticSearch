@@ -6,6 +6,7 @@ plugins {
 	kotlin("jvm") version "1.6.0"
 	kotlin("plugin.spring") version "1.6.0"
 	kotlin("plugin.jpa") version "1.6.0"
+	kotlin("kapt") version "1.3.61"
 }
 
 group = "com.example"
@@ -22,9 +23,14 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	implementation("io.github.microutils:kotlin-logging:1.12.5")
 
 	//elasticSearch
 	implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
+
+	// querydsl
+	api ("com.querydsl:querydsl-jpa")
+	kapt ("com.querydsl:querydsl-apt::jpa")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly ("com.h2database:h2")

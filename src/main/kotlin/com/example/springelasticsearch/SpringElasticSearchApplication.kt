@@ -8,12 +8,14 @@ import org.springframework.context.annotation.FilterType
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.scheduling.annotation.EnableAsync
+import org.springframework.scheduling.annotation.EnableScheduling
 
 @SpringBootApplication
 @EnableJpaRepositories(excludeFilters = [ComponentScan.Filter(
 	type = FilterType.ASSIGNABLE_TYPE,
 	classes = arrayOf(UserSearchRepository::class)
 )])
+@EnableScheduling
 class SpringElasticSearchApplication
 
 fun main(args: Array<String>) {

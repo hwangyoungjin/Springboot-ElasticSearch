@@ -54,10 +54,12 @@ spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
 spring.h2.console.enabled=true
 ```
 
-#### 2. Add dependency ES in gradle
+#### 2. Add dependency ES and queryDsl in gradle
 ```gradle
-//elasticSearch
-implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
+dependencies {
+    //elasticSearch
+    implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
+}
 ```
 #### 3. entity 추가
 ```kotlin
@@ -81,6 +83,37 @@ implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch"
 ```properties
 logging.level.org.springframework.data.elasticsearch.client.WIRE=TRACE
 ```
+
+#### 9. [Database와 elasticsearch Sync 맞추기](https://medium.com/@yassine.s.sabri/how-to-synchronize-mysql-database-with-elasticsearch-and-perform-data-querying-in-a-spring-boot-829ff7717380)
+##### 1. 스프링 스케쥴러 실행
+```kotlin
+@EnableScheduling
+class SpringElasticSearchApplication
+
+fun main(args: Array<String>) {
+	runApplication<SpringElasticSearchApplication>(*args)
+}
+```
+
+##### 2. User Entity의 Modified field 추가
+```kotlin
+@Document(indexName = "users")
+@Entity
+class User (
+
+    ...
+
+    @UpdateTimestamp
+    val modifiedAt : Timestamp
+
+)
+```
+##### 3. scheduler service 생성
+```kotlin
+
+```
+- [localdata 참조](https://stackoverflow.com/questions/47928424/localdate-between-using-jpa-2-1-criteria-api)
+
 
 ## Issue
 #### 1.Spring Data JPA와 함께 사용하는 경우 ApplicationContext 로드에 실패
@@ -113,6 +146,32 @@ class ElasticConfig : AbstractElasticsearchConfiguration() {
 public class ElasticsearchApplication {
  ...
 }
+```
+
+#### 3.  No converter found capable of converting from type [java.lang.Long] to type [java.sql.Timestamp]
+- [참조](https://stackoverflow.com/questions/62581249/spring-data-elasticsearch-no-converter-found-capable-of-converting-from-type)
+```kotlin
+갑 불러올때 아래 elasticsearchOperations.search() 부분에서 발생
+class CustomUserSearchRepositoryImpl(
+    private val elasticsearchOperations: ElasticsearchOperations
+) : CustomUserSearchRepository {
+    override fun searchByName(name: String, pageable: Pageable): List<User> {
+        val criteria: Criteria = Criteria.where("basicProfile.name").contains(name)
+        val query: Query = CriteriaQuery(criteria).setPageable(pageable)
+        val search = elasticsearchOperations.search(query, User::class.java)
+        return search.searchHits.map { it.content }
+    }
+}
+
+기존에 추가했던 UserEntity modifiedDate 필드 변경
+ -> elasticsearch annotations 추가
+/** 기존 **/
+@UpdateTimestamp
+val modifiedAt : Timestamp
+
+/** 변경 **/
+@Field(type = FieldType.Date, format = [], pattern = ["uuuu-MM-dd HH:mm:ss"])
+var modificationDate : LocalDateTime? = null
 ```
 
 ## Test
