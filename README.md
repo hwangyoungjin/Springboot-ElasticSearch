@@ -75,6 +75,18 @@ dependencies {
  - 이때 minikube 안에서 elasticsearch를 띄우고 있으므로
  - localhost:9200이 아닌 192.168.64.4(=minikube IP):9200으로 설정
  - localhost:9200으로 실행 시 => 'connection refused'
+```kotlin
+@Configuration
+@EnableElasticsearchRepositories(basePackageClasses = arrayOf(UserSearchRepository::class))
+class ElasticConfig : AbstractElasticsearchConfiguration() {
+    override fun elasticsearchClient(): RestHighLevelClient {
+        val clientConfiguration = ClientConfiguration.builder()
+            .connectedTo("192.168.64.4:9200")
+            .build()
+        return RestClients.create(clientConfiguration).rest()
+    }
+}
+```
 
 #### 6. Service 생성 [코드 생략]
 ```kotlin
