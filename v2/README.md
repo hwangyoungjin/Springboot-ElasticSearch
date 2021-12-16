@@ -125,79 +125,11 @@ dependencies {
 logging.level.org.springframework.data.elasticsearch.client.WIRE=TRACE
 ```
 
-#### 9. [Database와 elasticsearch Sync 맞추기](https://medium.com/@yassine.s.sabri/how-to-synchronize-mysql-database-with-elasticsearch-and-perform-data-querying-in-a-spring-boot-829ff7717380)
-##### 1. 스프링 스케쥴러 설정
-```kotlin
-@EnableScheduling
-class SpringElasticSearchApplication
+#### 9. Database와 elasticsearch Sync 맞추기
 
-fun main(args: Array<String>) {
-	runApplication<SpringElasticSearchApplication>(*args)
-}
-```
-
-##### 2. User Entity의 Modified field 추가
-```kotlin
-@Document(indexName = "users")
-@Entity
-class User (
-
-    ...
-
-    @Field(type = FieldType.Date, format = [], pattern = ["uuuu-MM-dd HH:mm:ss"])
-    var modificationDate : LocalDateTime? = null
-
-)
-```
-##### 3. scheduler service 생성
-```kotlin
-@Service
-class ElasticSynchronizer(
-    private val userSearchRepository: UserSearchRepository,
-    private val userRepository: UserRepository,
-) {
-
-    @Scheduled(cron = "*/60 * * * * *") //60초 마다 실행
-    @Transactional
-    fun sync(){
-        logger.info("Start Syncing - {}", LocalDateTime.now())
-        syncUsers()
-        logger.info("end Syncing - {}", LocalDateTime.now())
-    }
-
-    private fun syncUsers(){
-        //최근 2시간 동안 갱신된 Post 찾아서 ElasticSearch 갱신
-        val startDate = LocalDateTime.now().minusHours(2)
-        val endDate = LocalDateTime.now()
-
-        val userList: List<User> = if (userSearchRepository.count() == 0L) {
-            userRepository.findAll()
-        } else {
-            userRepository.findAllByModificationDate(startDate,endDate)
-        }
-        for (user in userList) {
-            logger.info("Syncing User - {}", user.id)
-            userSearchRepository.save(user)
-        }
-    }
-}
-```
 
 ## Issue
-#### 1.
 
-기존에 추가했던 UserEntity modifiedDate 필드 변경
- -> elasticsearch annotations 추가
-/** 기존 **/
-@UpdateTimestamp
-val modifiedAt : Timestamp
-
-/** 변경 **/
-@Field(type = FieldType.Date, format = [], pattern = ["uuuu-MM-dd HH:mm:ss"])
-var modificationDate : LocalDateTime? = null
-```
-
-## Test
 
 
 
