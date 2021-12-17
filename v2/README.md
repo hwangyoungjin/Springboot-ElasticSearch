@@ -166,6 +166,55 @@ GET /_analyze
   "tokenizer": "nori_tokenizer"
 }
 ```
+- Response
+```json
+{
+  "tokens" : [
+    {
+      "token" : "동해",
+      "start_offset" : 0,
+      "end_offset" : 2,
+      "type" : "word",
+      "position" : 0
+    },
+    {
+      "token" : "물",
+      "start_offset" : 2,
+      "end_offset" : 3,
+      "type" : "word",
+      "position" : 1
+    },
+    {
+      "token" : "과",
+      "start_offset" : 3,
+      "end_offset" : 4,
+      "type" : "word",
+      "position" : 2
+    },
+    {
+      "token" : "백두",
+      "start_offset" : 5,
+      "end_offset" : 7,
+      "type" : "word",
+      "position" : 3
+    },
+    {
+      "token" : "산",
+      "start_offset" : 7,
+      "end_offset" : 8,
+      "type" : "word",
+      "position" : 4
+    },
+    {
+      "token" : "이",
+      "start_offset" : 8,
+      "end_offset" : 9,
+      "type" : "word",
+      "position" : 5
+    }
+  ]
+}
+```
 
 ## Synchronize between Database and elasticsearch
 - <img src="https://user-images.githubusercontent.com/89895898/146403905-5db5d739-65d3-45ad-8950-4a9a76aee0ac.png" width="50%" height="50%">
@@ -202,6 +251,20 @@ GET /_analyze
 #### 3. Controller 수정 [코드 생략]
 ```kotlin
 - PostController
+```
+
+#### 4. Application 실행 후 Index 목록 확인
+- API
+```json
+GET /_aliases
+```
+- curl
+```shell
+curl -X GET "192.168.64.4:9200/_aliases?pretty=true"
+
+or
+
+curl "http://192.168.64.4:9200/_aliases?pretty=true"
 ```
 
 
