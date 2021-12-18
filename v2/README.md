@@ -96,6 +96,7 @@ dependencies {
 #### 3. entity 추가 [코드 생략]
 - Post(One) <-> Tag(Many)
 - Post(Many) <-> Category(One)
+- <img src="https://user-images.githubusercontent.com/89895898/146628729-d0391846-fe35-43db-bcf8-584d0c0ac1f5.png" width="50%" height="50%">
 ```kotlin
 - Post.kt
 - Category.kt
