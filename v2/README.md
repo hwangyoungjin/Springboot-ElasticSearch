@@ -110,7 +110,7 @@ data class PostDoc(
     val categoryName: String? = null,
     @Field(type = FieldType.Text)
     val tagName: String? = null, // post.tags.map { it.name }.toList().joinToString { "," }
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Date)
     val createdAt: String? = null // 검색 정렬시 사용
 )
 ```
