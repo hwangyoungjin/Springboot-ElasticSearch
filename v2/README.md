@@ -4,20 +4,6 @@
 ---
 ## SpringBoot, SpringData ElasticSearch, Kibana, Minikbe, Docker
 
----
-### V1과 V2 차이점
-#### 1. Tokenizer
-- V1에서는 Standard Tokenizer를 사용하므로 한글 같은 텍스트는 제대로 토큰화 되지 않는다. 따라서 V2에서는 어간 추출이 가능한 nori tokenizer를 활용
-```
- - Standard Tokenizer
-  - Ex> "동해물과 백두산이" -> "동해물과", "백두산이"
- - Nori Tokenizer
-  - Ex> "동해물과 백두산이" -> "동해", "물", "과", "백두", "산", "이"
-```
-#### 2. Index
-- V1에서는 Entity 1개에 대해서만 Index를 구성.
-- V2에서는 OneToMany, OneToOne등 검색할 Entity의 연관된 Entity가 많아 검색조건에 해당되는 필드들을 가진 Index 전용 class를 만들어 활용.
-
 ### Ref.
  - [EsBook](https://esbook.kimjmin.net/)
  - [spring.doc](https://docs.spring.io/spring-data/elasticsearch/docs/current/reference/html/#reference)
@@ -217,6 +203,24 @@ GET /_analyze
 }
 ```
 
+- Check Index as Curl
+```shell
+curl -X GET "192.168.64.4:9200/_aliases?pretty=true"
+
+or
+
+curl "http://192.168.64.4:9200/_aliases?pretty=true"
+```
+- response
+```json
+{
+  "posts" : {
+    "aliases" : { }
+  },
+   ...
+}
+```
+
 ## Synchronize between Database and elasticsearch
 - <img src="https://user-images.githubusercontent.com/89895898/146403905-5db5d739-65d3-45ad-8950-4a9a76aee0ac.png" width="50%" height="50%">
 
@@ -254,19 +258,7 @@ GET /_analyze
 - PostController
 ```
 
-#### 4. Application 실행 후 Index 목록 확인
-- API
-```json
-GET /_aliases
-```
-- curl
-```shell
-curl -X GET "192.168.64.4:9200/_aliases?pretty=true"
 
-or
-
-curl "http://192.168.64.4:9200/_aliases?pretty=true"
-```
 
 
 
