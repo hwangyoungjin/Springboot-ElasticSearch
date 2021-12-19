@@ -9,10 +9,10 @@ class Tag(
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0,
 
-    var name: String? = null,
+    var name: String = "",
 
     @JoinColumn(name = "post_id")
     @ManyToOne
-    var post: Post
+    var post: Post? = null
 
 ) : BaseEntity()

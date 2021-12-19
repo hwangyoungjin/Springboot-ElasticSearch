@@ -240,6 +240,14 @@ curl "http://192.168.64.4:9200/_aliases?pretty=true"
 - PostController
 ```
 
+#### 4. post 저장 후
+- in h2 Database
+- <img src="https://user-images.githubusercontent.com/60174144/146676218-87254798-4132-4cdb-a0fa-f00209a74fb1.png" width="50%" height="50%">
+
+- in elasticSearch index
+- <img src="https://user-images.githubusercontent.com/60174144/146676229-e0a02b5d-4529-49fc-b61f-e47b414a36e0.png" width="50%" height="50%">
+
+
 ## Search Post
 - <img src="https://user-images.githubusercontent.com/89895898/146404147-6a4ad3da-83a6-46bf-893f-21b5e9bc221a.png" width="50%" height="50%">
 
@@ -257,7 +265,16 @@ curl "http://192.168.64.4:9200/_aliases?pretty=true"
 ```kotlin
 - PostController
 ```
+#### 4. index에서 검색
+```
+- content: "스타트@업"인 post에서
+- text: "스타트 업"으로 검색
+- Using API in PostController
+```
+- <img src="https://user-images.githubusercontent.com/60174144/146676248-dc9f40ee-2d06-4c1e-9dbc-9b80d54860da.png" width="50%" height="50%">
 
+#### 5. 참고: sql like 사용해서 '%스타트 업%'은 검색X
+- <img src="https://user-images.githubusercontent.com/60174144/146676296-f0d82932-8a25-4640-ae5a-f2e237dc389f.png" width="50%" height="50%">
 
 
 

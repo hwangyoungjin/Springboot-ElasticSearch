@@ -8,9 +8,9 @@ class Post(
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0,
 
-    var title: String? = null,
+    var title: String = "",
 
-    var content: String? = null,
+    var content: String = "",
 
     val status: PostStatus = PostStatus.DRAFT,
 
@@ -21,4 +21,17 @@ class Post(
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     var tags: MutableList<Tag> = mutableListOf(),
 
-) : BaseEntity()
+) : BaseEntity() {
+    fun addTag(tag: Tag){
+        this.tags.add(tag)
+        tag.post = this
+    }
+
+    fun updateCategory(category: Category?){
+        //기존에 카테고리있다면 해당 카테고리에서 post 삭제
+        if(this.category != null) this.category!!.posts.remove(this)
+        //카테고리 변경
+        this.category = category
+        category?.posts?.add(this)
+    }
+}

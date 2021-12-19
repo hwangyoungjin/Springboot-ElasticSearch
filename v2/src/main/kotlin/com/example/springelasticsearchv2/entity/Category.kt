@@ -9,7 +9,7 @@ class Category(
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0,
 
-    val name: String? = null,
+    val name: String = "",
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     var posts: MutableList<Post> = mutableListOf()
