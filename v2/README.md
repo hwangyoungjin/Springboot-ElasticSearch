@@ -72,7 +72,7 @@ spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
 spring.h2.console.enabled=true
 ```
 
-#### 2. Add dependency ES and queryDsl in build.gradle.kts
+#### 2. Add dependency ES in build.gradle.kts
 ```kotlin
 dependencies {
     //elasticSearch
